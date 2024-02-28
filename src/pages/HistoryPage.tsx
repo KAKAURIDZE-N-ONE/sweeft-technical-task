@@ -1,37 +1,18 @@
+import { useSelector } from "react-redux";
 import SearchBlock from "../ui/SearchBlock";
 import styles from "./HistoryPage.module.css";
-
-const searchArray: string[] = [
-  "films",
-  "cars",
-  "nature",
-  "moon",
-  "poetry",
-  "school",
-  "programming",
-  "React",
-  "JSX",
-  "CSS",
-  "HTML",
-  "films",
-  "cars",
-  "nature",
-  "moon",
-  "poetry",
-  "school",
-  "programming",
-  "React",
-  "JSX",
-  "CSS",
-  "HTML",
-];
+import { RootState } from "../store";
 
 function HistoryPage() {
+  const galleryData = useSelector(
+    (store: RootState) => store.gallery.searchHistory
+  );
+
   return (
     <div className={styles.historyPage}>
       <div className={styles.searchedBox}>
         <h1 className={styles.header}>Search history:</h1>
-        {searchArray.map((el, i) => {
+        {galleryData.map((el: string, i: number) => {
           return <SearchBlock key={i} element={el} />;
         })}
       </div>
