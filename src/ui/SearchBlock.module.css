@@ -1,0 +1,19 @@
+.searchBlock {
+  display: inline-block;
+}
+.searchText {
+  font-size: 1.6rem;
+  background-color: rgb(196, 196, 196);
+  padding: 1rem 2rem;
+  margin-top: 1rem;
+  border-radius: 100rem;
+  margin-left: 0.6rem;
+  display: inline-block;
+  transition: 0.3s;
+  color: rgb(35, 35, 35);
+}
+
+.searchText:hover {
+  background-color: rgb(228, 228, 228);
+  cursor: pointer;
+}
