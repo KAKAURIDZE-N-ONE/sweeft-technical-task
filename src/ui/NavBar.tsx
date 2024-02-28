@@ -1,8 +1,24 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addSearchText } from "../features/gallerySlice";
 
 function NavBar() {
+  const [inputText, setInputText] = useState<string>("");
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputText(e.target.value);
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!inputText) return;
+    setInputText("");
+    dispatch(addSearchText(inputText));
+  }
 
   return (
     <div className={styles.navBar}>
@@ -14,12 +30,16 @@ function NavBar() {
       </Link>
       {location.pathname === "/" && (
         <div className={styles.inputBox}>
-          <input
-            className={styles.input}
-            type="text"
-            id="inputField"
-            placeholder="Search"
-          />
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <input
+              onChange={handleChange}
+              value={inputText}
+              className={styles.input}
+              type="text"
+              id="inputField"
+              placeholder="Search"
+            />
+          </form>
         </div>
       )}
     </div>
