@@ -1,9 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface Image {
+  url: string;
+  caption?: string;
+}
+
 interface GalleryState {
   searchHistory: string[];
   pageIndex: number;
-  imagesData: object[];
+  imagesData: Image[][];
 }
 
 const initialState: GalleryState = {
@@ -22,12 +27,23 @@ const customerSlice = createSlice({
     updatePageIndex(state) {
       state.pageIndex = state.pageIndex + 1;
     },
-    updateImagesData(state, action: PayloadAction<object>) {
+    updateImagesData(state, action) {
       state.imagesData.push(action.payload);
+    },
+    clearImagesData(state) {
+      state.imagesData = [];
+    },
+    resetPageIndex(state) {
+      state.pageIndex = 1;
     },
   },
 });
 
-export const { addSearchText, updatePageIndex, updateImagesData } =
-  customerSlice.actions;
+export const {
+  addSearchText,
+  updatePageIndex,
+  updateImagesData,
+  clearImagesData,
+  resetPageIndex,
+} = customerSlice.actions;
 export default customerSlice.reducer;

@@ -1,7 +1,11 @@
 import styles from "./Image.module.css";
 
-function Image() {
-  return <div className={styles.imageBox}></div>;
+function Image({ photo }: { photo: string }) {
+  return (
+    <div className={styles.imageBox}>
+      <img className={styles.image} src={photo} alt={photo} />
+    </div>
+  );
 }
 
 export default Image;
