@@ -1,4 +1,4 @@
-const apiKey: string = "zIjMaHAA3Z-TPw4-cndPHdXEXrAPmDwvA8y8v_2SsCk";
+const apiKey: string = "Nui0anJq2HUPcGdPxeu2BErxTK6hhqoN249TS9wX8Kk";
 
 export async function getSearchedData(
   pageIndex: number,
@@ -6,7 +6,7 @@ export async function getSearchedData(
 ): Promise<object> {
   try {
     const response = await fetch(
-      `https://api.unsplash.com/search/photos?stats=true&page=${pageIndex}&per_page=20&query=${searchWord}&client_id=${apiKey}`
+      `https://api.unsplash.com/search/photos?page=${pageIndex}&per_page=10&query=${searchWord}&client_id=${apiKey}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch data");

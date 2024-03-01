@@ -30,8 +30,13 @@ function Image({
   }
 
   return (
-    <div onClick={handleImageClick} className={styles.imageBox}>
-      <img className={styles.image} src={smallPhoto} alt={smallPhoto} />
+    <div className={styles.imageBox}>
+      <img
+        onClick={handleImageClick}
+        className={styles.image}
+        src={smallPhoto}
+        alt={smallPhoto}
+      />
     </div>
   );
 }

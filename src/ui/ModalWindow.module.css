@@ -1,12 +1,14 @@
 .modalWindow {
+  display: flex;
+  align-items: center;
   position: fixed;
   left: 50%;
-  top: 5rem;
-  transform: translate(-50%, 0);
-  width: 40%;
-  height: 50vh;
-  background-color: rgba(95, 141, 182, 0.895);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 55rem;
+  height: 95%;
   z-index: 100;
+  border-radius: 1.5rem;
 }
 
 .modalWindowBackground {
@@ -21,5 +23,60 @@
 }
 
 .fullImage {
-  width: 60%;
+  max-width: 38rem;
+  border-radius: 1.5rem;
+}
+
+.modalWindowLayout {
+  position: relative;
+  display: flex;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  gap: 1rem;
+  align-items: center;
+  border-radius: 1.5rem;
+}
+
+.descriptionBox {
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  background-color: aliceblue;
+  right: -5rem;
+  padding: 1rem 3rem;
+  border-radius: 2rem;
+  border: 3px solid black;
+  z-index: 101;
+}
+
+.descriptionBox h1 {
+  display: inline-block;
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.xButton {
+  position: absolute;
+  top: -2rem;
+  right: -6rem;
+  font-size: 4rem;
+  color: #fff;
+}
+
+.xButton {
+  width: 5.36rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  border-radius: 50%;
+  transition: all 0.3s;
+  border: 3px solid white;
+}
+
+.xButton:hover {
+  cursor: pointer;
+  background-color: #fff;
+  color: black;
+  border: 3px solid black;
 }

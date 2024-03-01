@@ -1,4 +1,4 @@
-const apiKey: string = "zIjMaHAA3Z-TPw4-cndPHdXEXrAPmDwvA8y8v_2SsCk";
+const apiKey: string = "Nui0anJq2HUPcGdPxeu2BErxTK6hhqoN249TS9wX8Kk";
 
 export async function getImageDetails(photoId: string) {
   try {

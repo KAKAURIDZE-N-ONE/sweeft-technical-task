@@ -12,7 +12,10 @@ function Gallery() {
   const imagesData = useSelector(
     (store: RootState) => store.gallery.imagesData
   );
-  // console.log(imagesData);
+  const searchHistory = useSelector(
+    (store: RootState) => store.gallery.searchHistory
+  );
+  // console.log(searchHistory);
   const showModal = useSelector((store: RootState) => store.gallery.showModal);
 
   const pageIndex = useSelector((store: RootState) => store.gallery.pageIndex);
@@ -25,57 +28,54 @@ function Gallery() {
 
   const search: string = searchParams.get("search") || "";
 
-  const { isLoading, isFetching } = useQuery<object>({
-    queryKey: ["images", search, pageIndex],
+  const { data, isLoading, isFetching } = useQuery<object>({
+    queryKey: ["images", search, pageIndex, searchHistory],
     queryFn: async () => {
+      if (searchHistory.length === 0) return {};
       const data = await getSearchedData(pageIndex, search);
       dispatch(updateImagesData(data?.results));
       return data || {}; // Return data or an empty object if data is undefined
     },
+    retry: false, // Disable automatic retries
   });
 
   //////////////////////////////getInfoAboutHeight/////////////////////////
   useEffect(() => {
-    // Function to update scrollY state
     const handleScroll = () => {
       const scrolledPixels = window.scrollY;
       setScrollY(scrolledPixels);
     };
 
-    // Function to update bodyHeight state
     const updateBodyHeight = () => {
       const bodyHeight = document.body.clientHeight;
       setBodyHeight(bodyHeight);
     };
 
-    // Function to update viewportHeight state
     const updateViewportHeight = () => {
       const viewportHeight = window.innerHeight;
       setViewportHeight(viewportHeight);
     };
 
-    // Attach event listeners
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", updateBodyHeight);
     window.addEventListener("resize", updateViewportHeight);
 
-    // Initial calculations
     handleScroll();
     updateBodyHeight();
     updateViewportHeight();
 
-    // Cleanup: Remove event listeners
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", updateBodyHeight);
       window.removeEventListener("resize", updateViewportHeight);
     };
-  }, [pageIndex, scrollY, viewportHeight]); // Empty dependency array ensures that effect runs only once on component mount
-
+  }, [scrollY]); // Empty dependency array indicates that this effect runs only once on mount
+  console.log(data);
   useEffect(
     function () {
-      if (isFetching || search === "") return;
-      if (Math.abs(scrollY + viewportHeight - bodyHeight) < 10) {
+      console.log(bodyHeight - viewportHeight - scrollY);
+      if (isFetching || search === "" || data.total / 10 <= pageIndex) return;
+      if (Math.abs(bodyHeight - viewportHeight - scrollY) < 100) {
         dispatch(updatePageIndex());
         const bodyHeight = document.body.clientHeight;
         setBodyHeight(bodyHeight);
@@ -89,7 +89,6 @@ function Gallery() {
     paddingRight: showModal ? "4.7rem" : "3rem",
   };
 
-  console.log(imagesData);
   return (
     <div style={GALLERY_STYLE} className={styles.gallery}>
       <div className={styles.galleryLayout}>
