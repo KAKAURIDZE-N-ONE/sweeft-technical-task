@@ -21,13 +21,21 @@ function SearchBlock({ element }: { element: string }) {
   function handleClick(): void {
     dispatch(resetPageIndex());
   }
+
+  const ACTIVE_LINK_STYLE = {
+    backgroundColor: search === element && "#000",
+    color: search === element && "white",
+  };
+
   return (
     <Link
       onClick={handleClick}
       to={`/history?search=${element}`}
       className={styles.searchBlock}
     >
-      <h1 className={styles.searchText}>{element}</h1>
+      <h1 style={ACTIVE_LINK_STYLE} className={styles.searchText}>
+        {element}
+      </h1>
     </Link>
   );
 }

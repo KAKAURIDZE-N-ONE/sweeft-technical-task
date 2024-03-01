@@ -13,7 +13,7 @@ interface GalleryState {
 
 const initialState: GalleryState = {
   searchHistory: [],
-  pageIndex: 1,
+  pageIndex: 0,
   imagesData: [],
 };
 
@@ -28,6 +28,7 @@ const customerSlice = createSlice({
       state.pageIndex = state.pageIndex + 1;
     },
     updateImagesData(state, action) {
+      console.log(action.payload);
       state.imagesData.push(action.payload);
     },
     clearImagesData(state) {
