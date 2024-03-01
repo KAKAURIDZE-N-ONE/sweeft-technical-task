@@ -8,17 +8,13 @@ import Image from "./Image";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchedData } from "../services/apiSearch";
 
-interface GalleryElement {
-  id: string;
-  urls: {
-    small: string;
-  };
-}
-
 function Gallery() {
   const imagesData = useSelector(
     (store: RootState) => store.gallery.imagesData
-  ).flat();
+  );
+  console.log(imagesData);
+  const showModal = useSelector((store: RootState) => store.gallery.showModal);
+
   const pageIndex = useSelector((store: RootState) => store.gallery.pageIndex);
   const [scrollY, setScrollY] = useState<number>(0);
   const [bodyHeight, setBodyHeight] = useState<number>(0);
@@ -37,6 +33,7 @@ function Gallery() {
       return data || {}; // Return data or an empty object if data is undefined
     },
   });
+
   //////////////////////////////getInfoAboutHeight/////////////////////////
   useEffect(() => {
     // Function to update scrollY state
@@ -88,11 +85,26 @@ function Gallery() {
   );
   //////////////////////////////////////////////////////////////////////////
 
+  const GALLERY_STYLE = {
+    paddingRight: showModal ? "4.7rem" : "3rem",
+  };
+
+  console.log(imagesData);
   return (
-    <div className={styles.gallery}>
+    <div style={GALLERY_STYLE} className={styles.gallery}>
       <div className={styles.galleryLayout}>
-        {imagesData.map((el: GalleryElement, i: number) => {
-          return el && <Image key={i} photo={el.urls?.small} />;
+        {imagesData.map((el, i) => {
+          return (
+            el && (
+              <Image
+                key={i}
+                smallPhoto={el.urls.small}
+                fullPhoto={el.urls.full}
+                imageId={el.id}
+                imageLikes={el.likes}
+              />
+            )
+          );
         })}
       </div>
       {isLoading && <div className="spinner"></div>}

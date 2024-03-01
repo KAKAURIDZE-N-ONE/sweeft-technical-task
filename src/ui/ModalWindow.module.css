@@ -1,0 +1,25 @@
+.modalWindow {
+  position: fixed;
+  left: 50%;
+  top: 5rem;
+  transform: translate(-50%, 0);
+  width: 40%;
+  height: 50vh;
+  background-color: rgba(95, 141, 182, 0.895);
+  z-index: 100;
+}
+
+.modalWindowBackground {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(3px); /* Apply a blur effect */
+  background-color: rgba(0, 0, 0, 0); /* Semi-transparent background */
+  z-index: 90;
+}
+
+.fullImage {
+  width: 60%;
+}

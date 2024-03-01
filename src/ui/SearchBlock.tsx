@@ -22,10 +22,13 @@ function SearchBlock({ element }: { element: string }) {
     dispatch(resetPageIndex());
   }
 
-  const ACTIVE_LINK_STYLE = {
-    backgroundColor: search === element && "#000",
-    color: search === element && "white",
-  };
+  const ACTIVE_LINK_STYLE: React.CSSProperties =
+    search === element
+      ? {
+          backgroundColor: "#000",
+          color: "white",
+        }
+      : {};
 
   return (
     <Link

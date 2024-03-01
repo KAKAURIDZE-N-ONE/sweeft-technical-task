@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 import styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
 import {
   addSearchText,
   clearImagesData,
@@ -14,6 +15,7 @@ import {
 } from "../features/gallerySlice";
 
 function NavBar() {
+  const showModal = useSelector((store: RootState) => store.gallery.showModal);
   const [inputText, setInputText] = useState<string>("");
   const [oldSearchValue, setOldSearchValue] = useState<string>("");
   const location = useLocation();
@@ -35,7 +37,6 @@ function NavBar() {
     setInputText(e.target.value);
   }
 
-  console.log(search, oldSearchValue);
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!inputText) return;
@@ -44,7 +45,9 @@ function NavBar() {
     navigate(`./?search=${inputText}`);
     dispatch(resetPageIndex());
   }
-
+  const FORM_STYLE = {
+    paddingRight: showModal ? "4.7rem" : "3rem",
+  };
   return (
     <div className={styles.navBar}>
       <Link to="/" className={styles.linkBox}>
@@ -55,7 +58,11 @@ function NavBar() {
       </Link>
       {location.pathname === "/" && (
         <div className={styles.inputBox}>
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <form
+            style={FORM_STYLE}
+            className={styles.form}
+            onSubmit={handleSubmit}
+          >
             <input
               onChange={handleChange}
               value={inputText}
