@@ -4,7 +4,7 @@ import { clearImagesData, updateImagesData } from "../features/gallerySlice";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getMostPopular } from "../services/apiMostPopular";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 function HomePage() {
   const [oldSearch, setOldSearch] = useState<string>("");

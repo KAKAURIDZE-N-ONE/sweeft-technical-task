@@ -1,20 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface Image {
-  url: string;
-  caption?: string;
+  id: string;
+  urls: {
+    small: string;
+    full: string;
+  };
+  likes: number;
+}
+
+interface ImageDetails {
+  image?: string;
+  downloads?: number;
+  likes?: number;
+  views?: number;
 }
 
 interface GalleryState {
   searchHistory: string[];
   pageIndex: number;
-  imagesData: Image[][];
+  imagesData: Image[];
+  showModal: boolean;
+  imageDetails: ImageDetails | object; // Define the type of imageDetails
 }
 
 const initialState: GalleryState = {
   searchHistory: [],
   pageIndex: 0,
   imagesData: [],
+  showModal: false,
+  imageDetails: {},
 };
 
 const customerSlice = createSlice({
@@ -28,14 +43,23 @@ const customerSlice = createSlice({
       state.pageIndex = state.pageIndex + 1;
     },
     updateImagesData(state, action) {
-      console.log(action.payload);
-      state.imagesData.push(action.payload);
+      state.imagesData.push(...action.payload);
     },
     clearImagesData(state) {
       state.imagesData = [];
     },
     resetPageIndex(state) {
       state.pageIndex = 1;
+    },
+    updateShowModal(state, action: PayloadAction<boolean>) {
+      state.showModal = action.payload;
+    },
+    updateImageDetails(state, action: PayloadAction<ImageDetails>) {
+      state.imageDetails = { ...state.imageDetails, ...action.payload };
+      console.log(state.imageDetails);
+    },
+    clearImageDetails(state) {
+      state.imageDetails = {};
     },
   },
 });
@@ -46,5 +70,8 @@ export const {
   updateImagesData,
   clearImagesData,
   resetPageIndex,
+  updateShowModal,
+  updateImageDetails,
+  clearImageDetails,
 } = customerSlice.actions;
 export default customerSlice.reducer;
