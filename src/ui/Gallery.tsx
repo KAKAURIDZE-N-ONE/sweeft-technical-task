@@ -12,14 +12,14 @@ function Gallery() {
   const imagesData = useSelector(
     (store: RootState) => store.gallery.imagesData
   );
-  console.log(imagesData);
+  // console.log(imagesData);
   const showModal = useSelector((store: RootState) => store.gallery.showModal);
 
   const pageIndex = useSelector((store: RootState) => store.gallery.pageIndex);
   const [scrollY, setScrollY] = useState<number>(0);
   const [bodyHeight, setBodyHeight] = useState<number>(0);
   const [viewportHeight, setViewportHeight] = useState<number>(0);
-
+  //test
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
