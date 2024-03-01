@@ -7,7 +7,11 @@ import {
 import styles from "./NavBar.module.css";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addSearchText, clearImagesData } from "../features/gallerySlice";
+import {
+  addSearchText,
+  clearImagesData,
+  resetPageIndex,
+} from "../features/gallerySlice";
 
 function NavBar() {
   const [inputText, setInputText] = useState<string>("");
@@ -21,7 +25,7 @@ function NavBar() {
   const search: string = searchParams.get("search") || "";
 
   useEffect(() => {
-    if (oldSearchValue !== search) {
+    if (oldSearchValue !== search || search === "") {
       setOldSearchValue(search);
       dispatch(clearImagesData());
     }
@@ -37,7 +41,8 @@ function NavBar() {
     if (!inputText) return;
     setInputText("");
     dispatch(addSearchText(inputText));
-    navigate(`/?search=${inputText}`);
+    navigate(`./?search=${inputText}`);
+    dispatch(resetPageIndex());
   }
 
   return (

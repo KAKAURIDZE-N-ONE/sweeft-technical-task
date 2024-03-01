@@ -29,11 +29,9 @@ function Gallery() {
 
   const search: string = searchParams.get("search") || "";
 
-  const { isLoading, refetch, isFetching } = useQuery<object>({
+  const { isLoading, isFetching } = useQuery<object>({
     queryKey: ["images", search, pageIndex],
     queryFn: async () => {
-      console.log(search);
-
       const data = await getSearchedData(pageIndex, search);
       dispatch(updateImagesData(data?.results));
       return data || {}; // Return data or an empty object if data is undefined
@@ -79,25 +77,25 @@ function Gallery() {
 
   useEffect(
     function () {
-      if (isFetching) return;
+      if (isFetching || search === "") return;
       if (Math.abs(scrollY + viewportHeight - bodyHeight) < 10) {
         dispatch(updatePageIndex());
         const bodyHeight = document.body.clientHeight;
         setBodyHeight(bodyHeight);
       }
     },
-    [scrollY, viewportHeight, bodyHeight, dispatch, isFetching]
+    [scrollY, viewportHeight, bodyHeight, dispatch, isFetching, search]
   );
   //////////////////////////////////////////////////////////////////////////
 
   return (
     <div className={styles.gallery}>
-      <h1 className={styles.galleryHeader}>{search}</h1>
       <div className={styles.galleryLayout}>
         {imagesData.map((el: GalleryElement, i: number) => {
           return el && <Image key={i} photo={el.urls?.small} />;
         })}
       </div>
+      {isLoading && <div className="spinner"></div>}
     </div>
   );
 }
