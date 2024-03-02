@@ -7,14 +7,13 @@ import { updateImagesData, updatePageIndex } from "../features/gallerySlice";
 import Image from "./Image";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchedData } from "../services/apiSearch";
+import { getMostPopular } from "../services/apiMostPopular";
 
 function Gallery() {
   const imagesData = useSelector(
     (store: RootState) => store.gallery.imagesData
   );
-  const searchHistory = useSelector(
-    (store: RootState) => store.gallery.searchHistory
-  );
+
   // console.log(searchHistory);
   const showModal = useSelector((store: RootState) => store.gallery.showModal);
 
@@ -22,21 +21,29 @@ function Gallery() {
   const [scrollY, setScrollY] = useState<number>(0);
   const [bodyHeight, setBodyHeight] = useState<number>(0);
   const [viewportHeight, setViewportHeight] = useState<number>(0);
+
   //test
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
   const search: string = searchParams.get("search") || "";
 
-  const { data, isLoading, isFetching } = useQuery<object>({
-    queryKey: ["images", search, pageIndex, searchHistory],
+  useEffect(function () {
+    dispatch(updatePageIndex());
+  }, []);
+
+  const { refetch, data, isLoading, isFetching } = useQuery<object>({
+    queryKey: ["images", search, pageIndex],
     queryFn: async () => {
-      if (searchHistory.length === 0) return {};
-      const data = await getSearchedData(pageIndex, search);
+      let data;
+      if (search !== "") data = await getSearchedData(pageIndex, search);
+      if (search === undefined) data = await getMostPopular();
       dispatch(updateImagesData(data?.results));
       return data || {}; // Return data or an empty object if data is undefined
     },
     retry: false, // Disable automatic retries
+    enabled: !document.hidden, // Fetch data only if tab is active
+    staleTime: 300000,
   });
 
   //////////////////////////////getInfoAboutHeight/////////////////////////
@@ -70,12 +77,10 @@ function Gallery() {
       window.removeEventListener("resize", updateViewportHeight);
     };
   }, [scrollY]); // Empty dependency array indicates that this effect runs only once on mount
-  console.log(data);
   useEffect(
     function () {
-      console.log(bodyHeight - viewportHeight - scrollY);
       if (isFetching || search === "" || data.total / 10 <= pageIndex) return;
-      if (Math.abs(bodyHeight - viewportHeight - scrollY) < 100) {
+      if (Math.abs(bodyHeight - viewportHeight - scrollY) < 400) {
         dispatch(updatePageIndex());
         const bodyHeight = document.body.clientHeight;
         setBodyHeight(bodyHeight);
@@ -84,6 +89,13 @@ function Gallery() {
     [scrollY, viewportHeight, bodyHeight, dispatch, isFetching, search]
   );
   //////////////////////////////////////////////////////////////////////////
+
+  useEffect(
+    function () {
+      refetch();
+    },
+    [search, refetch]
+  );
 
   const GALLERY_STYLE = {
     paddingRight: showModal ? "4.7rem" : "3rem",

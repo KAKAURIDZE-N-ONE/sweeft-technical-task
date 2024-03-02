@@ -12,14 +12,10 @@ function HistoryPage() {
   );
   const dispatch = useDispatch();
 
-  useEffect(
-    function () {
-      dispatch(clearImagesData());
-    },
-    [dispatch]
-  );
+  useEffect(function () {
+    dispatch(clearImagesData());
+  });
 
-  console.log(galleryWordsData);
   return (
     <div className={styles.historyPage}>
       <div className={styles.searchedBox}>

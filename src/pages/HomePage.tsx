@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import Gallery from "../ui/Gallery";
-import { clearImagesData, updateImagesData } from "../features/gallerySlice";
+import {
+  clearImagesData,
+  updateImagesData,
+  updateOldInputValue,
+} from "../features/gallerySlice";
 import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { getMostPopular } from "../services/apiMostPopular";
@@ -12,14 +16,24 @@ function HomePage() {
 
   const [searchParams] = useSearchParams();
   const search: string = searchParams.get("search") || "";
+  console.log(search);
+
+  useEffect(
+    function () {
+      dispatch(updateOldInputValue(search));
+    },
+    [dispatch, search]
+  );
 
   const { refetch } = useQuery<object>({
-    queryKey: ["popular"],
+    queryKey: ["popular", search],
     queryFn: async () => {
       setOldSearch(search);
+      if (search !== "") return {};
       const data = await getMostPopular();
       dispatch(clearImagesData());
       dispatch(updateImagesData(data));
+      dispatch(updateOldInputValue(""));
       return data || {}; // Return data or an empty object if data is undefined
     },
   });

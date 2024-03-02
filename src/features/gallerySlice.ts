@@ -22,6 +22,7 @@ interface GalleryState {
   imagesData: Image[];
   showModal: boolean;
   imageDetails: ImageDetails | object; // Define the type of imageDetails
+  oldInputValue: string;
 }
 
 const initialState: GalleryState = {
@@ -30,6 +31,7 @@ const initialState: GalleryState = {
   imagesData: [],
   showModal: false,
   imageDetails: {},
+  oldInputValue: "",
 };
 
 const customerSlice = createSlice({
@@ -61,6 +63,9 @@ const customerSlice = createSlice({
     clearImageDetails(state) {
       state.imageDetails = {};
     },
+    updateOldInputValue(state, action: PayloadAction<string>) {
+      state.oldInputValue = action.payload;
+    },
   },
 });
 
@@ -73,5 +78,6 @@ export const {
   updateShowModal,
   updateImageDetails,
   clearImageDetails,
+  updateOldInputValue,
 } = customerSlice.actions;
 export default customerSlice.reducer;

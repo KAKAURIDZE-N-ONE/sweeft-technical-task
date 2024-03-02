@@ -12,12 +12,17 @@ import {
   addSearchText,
   clearImagesData,
   resetPageIndex,
+  updateOldInputValue,
 } from "../features/gallerySlice";
 
 function NavBar() {
   const showModal = useSelector((store: RootState) => store.gallery.showModal);
+  const oldInputValue = useSelector(
+    (store: RootState) => store.gallery.oldInputValue
+  );
   const [inputText, setInputText] = useState<string>("");
   const [oldSearchValue, setOldSearchValue] = useState<string>("");
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,10 +45,16 @@ function NavBar() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!inputText) return;
-    setInputText("");
-    dispatch(addSearchText(inputText));
-    navigate(`./?search=${inputText}`);
-    dispatch(resetPageIndex());
+    if (inputText === oldInputValue) {
+      setInputText("");
+      dispatch(addSearchText(inputText));
+    } else {
+      dispatch(updateOldInputValue(inputText));
+      setInputText("");
+      dispatch(addSearchText(inputText));
+      navigate(`./?search=${inputText}`);
+      dispatch(resetPageIndex());
+    }
   }
   const FORM_STYLE = {
     paddingRight: showModal ? "4.7rem" : "3rem",

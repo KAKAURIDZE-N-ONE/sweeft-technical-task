@@ -1,4 +1,4 @@
-const apiKey: string = "tKI85mb8gV-en1QDQO172EhtleiayfqzBDDgeGhMfJ8";
+const apiKey: string = "WUcnunigYeqrGUKXOkykSIce6CkbqgRWrO-TUYoNg5w";
 
 export async function getMostPopular() {
   try {
