@@ -19,6 +19,7 @@ const Image = memo(function Image({
   const search: string = searchParams.get("search") || "";
   const pathname = location.pathname;
 
+  // image_ზე დაკლიკებისას ვქმნი შესაბამის url_ს.
   function handleImageClick() {
     navigate(
       `${pathname}?${search ? `search=${search}&` : ""}image_id=${imageId}`

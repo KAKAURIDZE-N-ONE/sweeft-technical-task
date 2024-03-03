@@ -43,6 +43,10 @@ function Gallery() {
   const location = useLocation();
   const pathname = location.pathname;
 
+  // იმ შემთხვევაში თუ homePage_ზე არის მომხმარებელი და დასერჩილი არ აქვს არაფერი
+  // api_ის მეშვეობით მომაქვს პოპულარული ფოტოების დატა
+  // ხოლო თუ დასერჩილია რაიმე მაშინ სერჩის api_ით ვიღებ დატას.
+  // შედეგად მომხმარებელს url_ის დაკოპირებით შეეძლება შესაბამისი კატეგორიის გაზიარება სხვისთვის
   const { refetch, data, isLoading, isFetching } = useQuery<ApiResponse>({
     queryKey: ["images", search, pageIndex, pathname],
     queryFn: async () => {
@@ -97,11 +101,12 @@ function Gallery() {
     };
   }, [scrollY]);
 
+  const VALUE_FROM_BOTTOM = 400;
   useEffect(
     function () {
       if (!data || isFetching || search === "" || data.total / 10 <= pageIndex)
         return;
-      if (Math.abs(bodyHeight - viewportHeight - scrollY) < 400) {
+      if (Math.abs(bodyHeight - viewportHeight - scrollY) < VALUE_FROM_BOTTOM) {
         dispatch(updatePageIndex());
         const bodyHeight = document.body.clientHeight;
         setBodyHeight(bodyHeight);

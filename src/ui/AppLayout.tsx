@@ -19,16 +19,19 @@ function AppLayout() {
     ? (document.body.style.overflow = "hidden")
     : (document.body.style.overflow = "auto");
 
+  // როდესაც appLayout ჩაიტვირთება მათგან ვიღებ ფოტოს id_ის რათა მოდალური ფანჯარა გაიხსნას
+  // იმ შემთხვევაში თუ იძებნება image_id.
   const [searchParams] = useSearchParams();
   const imageId: string = searchParams.get("image_id") || "";
   const search: string = searchParams.get("search") || "";
 
+  // query_ის dependency_ად აქვს imageId რათა ყოველი ცვლილების დროს მიიღოს API_დან დატა
+  // შესაბამისი id_ის მიხედვით
   useQuery<object>({
     queryKey: ["singleImage", imageId],
     queryFn: async () => {
       const data = await getSinglePhoto(imageId);
-      console.log(data);
-
+      // slicer_ში ვგზავნი საჭირო დეტალებს
       dispatch(
         updateImageDetails({
           likes: data.likes,
@@ -41,12 +44,15 @@ function AppLayout() {
     },
   });
 
+  // ვხსნი ფანჯარას თითოეული imageId_ის შეცვლისას
   useEffect(
     function () {
       if (imageId !== "") dispatch(updateShowModal(true));
     },
     [dispatch, imageId]
   );
+
+  // შედეგად მომხმარებელს url_ის დაკოპირებით შეეძლება კონკრეტული ფოტოს ლინკი დააკოპიროს
 
   return (
     <>
@@ -59,7 +65,8 @@ function AppLayout() {
             style={{
               textAlign: "center",
               marginTop: "2rem",
-              fontSize: "2.6rem",
+              fontSize: "2.8rem",
+              borderBottom: "2px solid black",
             }}
           >
             The most populars
@@ -70,7 +77,8 @@ function AppLayout() {
             style={{
               textAlign: "center",
               marginTop: "2rem",
-              fontSize: "2.6rem",
+              fontSize: "2.8rem",
+              borderBottom: "2px solid black",
             }}
           >
             {search}

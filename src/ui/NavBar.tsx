@@ -1,11 +1,6 @@
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./NavBar.module.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
@@ -21,27 +16,20 @@ function NavBar() {
     (store: RootState) => store.gallery.oldInputValue
   );
   const [inputText, setInputText] = useState<string>("");
-  const [oldSearchValue, setOldSearchValue] = useState<string>("");
 
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [searchParams] = useSearchParams();
-
-  const search: string = searchParams.get("search") || "";
-
-  useEffect(() => {
-    if (oldSearchValue !== search || search === "") {
-      setOldSearchValue(search);
-      dispatch(clearImagesData());
-    }
-  }, [search, oldSearchValue, dispatch]);
-
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputText(e.target.value);
   }
 
+  // იმ შემთხვევაში თუ მომხმარებელი იგივე ტექსტს მოძებნის თავიდან არ ვარენდერებ
+  // მაგრამ სერჩების ისტორიაში ვამატებ იგივე სიტყვას
+  // ხოლო თუ განსხვავებულ ტექსტს ჩაწერს მაშინ ვასუფთავებ ძველ დატას და url_ში
+  // გადამაქვს შესაბამისი საძიებო სიტყვა აგრეთვე ვარესეტებ pageIndex_ს რათა
+  // ისევ პირველი გვერდიდან დაიწყოს დარენდერება
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!inputText) return;
@@ -49,6 +37,7 @@ function NavBar() {
       setInputText("");
       dispatch(addSearchText(inputText));
     } else {
+      dispatch(clearImagesData());
       dispatch(updateOldInputValue(inputText));
       setInputText("");
       dispatch(addSearchText(inputText));

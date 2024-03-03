@@ -11,6 +11,8 @@ function SearchBlock({ element }: { element: string }) {
 
   const search: string = searchParams.get("search") || "";
 
+  // დასერჩილ სიტყვაზე დაკლიკებისას თუ ძველი საძიებო სიტყვა არ უდრის ახალს, მაშინ ვასუფთავებ
+  // ფოტოების დატას, ეს button_ები react-router_ის Link_ად მაქვს ასახული
   useEffect(() => {
     if (oldSearchValue !== search) {
       setOldSearchValue(search);

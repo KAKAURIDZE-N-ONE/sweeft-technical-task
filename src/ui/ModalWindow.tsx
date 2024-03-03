@@ -13,6 +13,7 @@ interface ImageDetails {
 }
 
 function ModalWindow() {
+  // სლაისერიდან მომაქვს ფოტოს დეტალები
   const imageDetails = useSelector(
     (store: RootState) => store.gallery.imageDetails as ImageDetails
   );
@@ -26,6 +27,8 @@ function ModalWindow() {
   const search: string = searchParams.get("search") || "";
   const pathname = location.pathname;
 
+  // ამ ფუნქციებით უკვე გახსნნილ ფანჯარას ვხურავ და ვაბრუნებ შესაბამის url_ის მისამართზე
+  /////////////////////////////////////////////////////////////////////////
   function handleModalBackgroundClick() {
     dispatch(updateShowModal(false));
     dispatch(clearImageDetails());
@@ -55,6 +58,7 @@ function ModalWindow() {
   function handleImageLoad() {
     setImageIsLoaded(true);
   }
+  /////////////////////////////////////////////////////////////////////////////
 
   return (
     <>
