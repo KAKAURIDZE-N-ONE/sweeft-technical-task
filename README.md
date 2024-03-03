@@ -1,30 +1,46 @@
-# React + TypeScript + Vite
+# Making Science | Seeft ტექნიკური დავალება
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## პროექტის სტრუქტურა
 
-Currently, two official plugins are available:
+- `features` აქ არის Redux_ის slicer
+- `pages` აქ არის ორივე გვერდი
+- `services` ამ ფოლდერში API_ებია
+- `ui` აქ კი სხვა კომპონენტები
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ტექნოლოგიები
 
-## Expanding the ESLint configuration
+- **React.js**
+- **module CSS**
+- **TypeScript**
+- **Vite**
+- **Redux with Redux Toolkit**
+- **React Router**
+- **React Query**
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## პროექტის გაშვება
 
-- Configure the top-level `parserOptions` property like this:
+**დაკლონეთ რეპოზიტორი:**
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```
+git clone https://github.com/KAKAURIDZE-N-ONE/sweeft-technical-task.git
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**შედით პროექტის ფოლდერში:**
+
+```
+cd sweeft-technical-task
+```
+
+**ჩამოწერეთ node_modules:**
+
+```
+npm i
+```
+
+**გაუშვით პროექტი:**
+
+```
+npm run dev
+```
+
+**მაუსით დააკლიკეთ localhost_ის ლინკს**
