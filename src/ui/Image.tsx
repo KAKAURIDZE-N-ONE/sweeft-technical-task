@@ -1,20 +1,18 @@
-import { useDispatch } from "react-redux";
 import styles from "./Image.module.css";
-import { updateImageDetails, updateShowModal } from "../features/gallerySlice";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { memo } from "react";
 
-function Image({
+// memo_ს ვიყენებ იმისთვის რომ ფოტოები ტყუილად არ დარენდერდეს თავიდან სქროლვის დროს
+// იგივე prop_ების მიღებისას
+const Image = memo(function Image({
   smallPhoto,
-  fullPhoto,
   imageId,
-  imageLikes,
+  altDescription,
 }: {
   smallPhoto: string;
-  fullPhoto: string;
   imageId: string;
-  imageLikes: number;
+  altDescription: string;
 }) {
-  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -25,8 +23,6 @@ function Image({
     navigate(
       `${pathname}?${search ? `search=${search}&` : ""}image_id=${imageId}`
     );
-    dispatch(updateShowModal(true));
-    dispatch(updateImageDetails({ likes: imageLikes, image: fullPhoto }));
   }
 
   return (
@@ -35,10 +31,9 @@ function Image({
         onClick={handleImageClick}
         className={styles.image}
         src={smallPhoto}
-        alt={smallPhoto}
+        alt={altDescription}
       />
     </div>
   );
-}
-
+});
 export default Image;

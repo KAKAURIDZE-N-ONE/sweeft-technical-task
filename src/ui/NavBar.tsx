@@ -59,8 +59,11 @@ function NavBar() {
   const FORM_STYLE = {
     paddingRight: showModal ? "4.7rem" : "3rem",
   };
+  const NAV_BAR_STYLE = {
+    zIndex: showModal ? "50" : "1000",
+  };
   return (
-    <div className={styles.navBar}>
+    <div style={NAV_BAR_STYLE} className={styles.navBar}>
       <Link to="/" className={styles.linkBox}>
         <h1 className={styles.link}>Home</h1>
       </Link>

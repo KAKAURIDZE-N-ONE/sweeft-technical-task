@@ -2,51 +2,70 @@ import styles from "./Gallery.module.css";
 import { RootState } from "../store";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
-import { updateImagesData, updatePageIndex } from "../features/gallerySlice";
+import { useLocation, useSearchParams } from "react-router-dom";
+import {
+  clearImagesData,
+  updateImagesData,
+  updatePageIndex,
+} from "../features/gallerySlice";
 import Image from "./Image";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchedData } from "../services/apiSearch";
 import { getMostPopular } from "../services/apiMostPopular";
 
+interface ApiResponse {
+  total: number;
+}
+
 function Gallery() {
   const imagesData = useSelector(
     (store: RootState) => store.gallery.imagesData
   );
-
-  // console.log(searchHistory);
   const showModal = useSelector((store: RootState) => store.gallery.showModal);
-
   const pageIndex = useSelector((store: RootState) => store.gallery.pageIndex);
+
   const [scrollY, setScrollY] = useState<number>(0);
   const [bodyHeight, setBodyHeight] = useState<number>(0);
   const [viewportHeight, setViewportHeight] = useState<number>(0);
 
-  //test
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
 
   const search: string = searchParams.get("search") || "";
 
-  useEffect(function () {
-    dispatch(updatePageIndex());
-  }, []);
+  useEffect(
+    function () {
+      dispatch(updatePageIndex());
+    },
+    [dispatch]
+  );
 
-  const { refetch, data, isLoading, isFetching } = useQuery<object>({
-    queryKey: ["images", search, pageIndex],
+  const location = useLocation();
+  const pathname = location.pathname;
+
+  const { refetch, data, isLoading, isFetching } = useQuery<ApiResponse>({
+    queryKey: ["images", search, pageIndex, pathname],
     queryFn: async () => {
       let data;
-      if (search !== "") data = await getSearchedData(pageIndex, search);
-      if (search === undefined) data = await getMostPopular();
-      dispatch(updateImagesData(data?.results));
-      return data || {}; // Return data or an empty object if data is undefined
+      if (search !== "") {
+        data = await getSearchedData(pageIndex, search);
+        dispatch(updateImagesData(data?.results));
+      }
+      if (search === undefined || (search === "" && pathname === "/")) {
+        data = await getMostPopular();
+        dispatch(clearImagesData());
+        dispatch(updateImagesData(data));
+      }
+      return data || {};
     },
-    retry: false, // Disable automatic retries
-    enabled: !document.hidden, // Fetch data only if tab is active
-    staleTime: 300000,
+    retry: false,
+    staleTime: 30000000,
   });
 
   //////////////////////////////getInfoAboutHeight/////////////////////////
+  // ამ ეფექტით ვზომავ ეკრანის სიმაღლეს, უკვე არსებული გალერიის სიმაღლეს და ჩამოსქროლვის სიმაღლეს
+  // როდესაც ეკრანის ძირი მიუახლოვდება გალერიის ძირს მაშინ ვაახლებ გვერდის ინდექსს და თავიდან
+  // ვიძახებ API_ის.
   useEffect(() => {
     const handleScroll = () => {
       const scrolledPixels = window.scrollY;
@@ -76,17 +95,28 @@ function Gallery() {
       window.removeEventListener("resize", updateBodyHeight);
       window.removeEventListener("resize", updateViewportHeight);
     };
-  }, [scrollY]); // Empty dependency array indicates that this effect runs only once on mount
+  }, [scrollY]);
+
   useEffect(
     function () {
-      if (isFetching || search === "" || data.total / 10 <= pageIndex) return;
+      if (!data || isFetching || search === "" || data.total / 10 <= pageIndex)
+        return;
       if (Math.abs(bodyHeight - viewportHeight - scrollY) < 400) {
         dispatch(updatePageIndex());
         const bodyHeight = document.body.clientHeight;
         setBodyHeight(bodyHeight);
       }
     },
-    [scrollY, viewportHeight, bodyHeight, dispatch, isFetching, search]
+    [
+      scrollY,
+      viewportHeight,
+      bodyHeight,
+      dispatch,
+      isFetching,
+      search,
+      data,
+      pageIndex,
+    ]
   );
   //////////////////////////////////////////////////////////////////////////
 
@@ -104,15 +134,14 @@ function Gallery() {
   return (
     <div style={GALLERY_STYLE} className={styles.gallery}>
       <div className={styles.galleryLayout}>
-        {imagesData.map((el, i) => {
+        {imagesData.map((el) => {
           return (
             el && (
               <Image
-                key={i}
+                key={el.id}
                 smallPhoto={el.urls.small}
-                fullPhoto={el.urls.full}
                 imageId={el.id}
-                imageLikes={el.likes}
+                altDescription={el.alt_description}
               />
             )
           );

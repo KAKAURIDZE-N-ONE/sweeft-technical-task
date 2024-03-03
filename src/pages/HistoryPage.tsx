@@ -1,28 +1,44 @@
 import { useDispatch, useSelector } from "react-redux";
 import SearchBlock from "../ui/SearchBlock";
-import styles from "./HistoryPage.module.css";
 import { RootState } from "../store";
 import Gallery from "../ui/Gallery";
 import { useEffect } from "react";
 import { clearImagesData } from "../features/gallerySlice";
 
 function HistoryPage() {
+  // დასერჩილ სიტყვებს ვიღებ სლაისერიდან
   const galleryWordsData = useSelector(
     (store: RootState) => store.gallery.searchHistory
   );
   const dispatch = useDispatch();
 
-  useEffect(function () {
-    dispatch(clearImagesData());
-  });
+  // კომპონენტის ჩატვირთვის დროს ვასუფთავებ ფოტოების დატას,რათა პოპულარული ფოტოები
+  // არ გადმოიტანოს ისტორიის გვერდზე
+  useEffect(
+    function () {
+      dispatch(clearImagesData());
+    },
+    [dispatch]
+  );
 
   return (
-    <div className={styles.historyPage}>
-      <div className={styles.searchedBox}>
-        <h1 className={styles.header}>Search history:</h1>
+    <div>
+      <div>
+        <h1
+          style={{
+            display: "inline-block",
+            marginLeft: "3rem",
+            fontSize: "2.4rem",
+          }}
+        >
+          Search history:
+        </h1>
         {galleryWordsData.map((el: string, i: number) => {
           return <SearchBlock key={i} element={el} />;
         })}
+        {galleryWordsData.length === 0 && (
+          <h1 style={{ display: "inline-block", marginLeft: "1rem" }}>Empty</h1>
+        )}
       </div>
       <Gallery />
     </div>
