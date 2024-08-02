@@ -42,6 +42,9 @@ const customerSlice = createSlice({
   reducers: {
     // searchHistory_ში ვინახავ ყველა სიტყვას რომელიც დავსერჩე
     addSearchText(state, action: PayloadAction<string>) {
+      state.searchHistory = state.searchHistory.filter(
+        (el) => el !== action.payload
+      );
       state.searchHistory.push(action.payload);
     },
     // infinite სქროლის დროს გვერდის ინდექსს ვცვლი ამ რედუსერით

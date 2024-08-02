@@ -7,7 +7,6 @@ import { memo } from "react";
 const Image = memo(function Image({
   smallPhoto,
   imageId,
-  altDescription,
 }: {
   smallPhoto: string;
   imageId: string;
@@ -28,12 +27,15 @@ const Image = memo(function Image({
 
   return (
     <div className={styles.imageBox}>
-      <img
+      <div
+        style={{
+          backgroundImage: `url(${smallPhoto})`,
+          backgroundPosition: "50% 50%",
+          backgroundSize: "cover",
+        }}
         onClick={handleImageClick}
         className={styles.image}
-        src={smallPhoto}
-        alt={altDescription}
-      />
+      ></div>
     </div>
   );
 });

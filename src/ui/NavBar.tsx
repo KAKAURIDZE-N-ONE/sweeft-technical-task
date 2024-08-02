@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./NavBar.module.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import {
@@ -15,36 +15,57 @@ function NavBar() {
   const oldInputValue = useSelector(
     (store: RootState) => store.gallery.oldInputValue
   );
+  const [pauseSearching, setPauseSearching] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>("");
-
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setInputText(e.target.value);
+    setPauseSearching(true);
+    timeoutRef.current = setTimeout(() => {
+      setPauseSearching(false);
+    }, 500); // Test with different values
   }
+
+  console.log(pauseSearching);
 
   // იმ შემთხვევაში თუ მომხმარებელი იგივე ტექსტს მოძებნის თავიდან არ ვარენდერებ
   // მაგრამ სერჩების ისტორიაში ვამატებ იგივე სიტყვას
   // ხოლო თუ განსხვავებულ ტექსტს ჩაწერს მაშინ ვასუფთავებ ძველ დატას და url_ში
   // გადამაქვს შესაბამისი საძიებო სიტყვა აგრეთვე ვარესეტებ pageIndex_ს რათა
   // ისევ პირველი გვერდიდან დაიწყოს დარენდერება
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!inputText) return;
+  useEffect(() => {
+    if (!inputText || inputText.length < 3 || pauseSearching) return;
+    setPauseSearching(true);
     if (inputText === oldInputValue) {
-      setInputText("");
       dispatch(addSearchText(inputText));
     } else {
       dispatch(clearImagesData());
       dispatch(updateOldInputValue(inputText));
-      setInputText("");
       dispatch(addSearchText(inputText));
       navigate(`./?search=${inputText}`);
       dispatch(resetPageIndex());
     }
+  }, [inputText, dispatch, navigate, oldInputValue, pauseSearching]);
+
+  function handleSubmit() {
+    if (!inputText || inputText.length < 3 || pauseSearching) return;
+    setPauseSearching(true);
+
+    dispatch(clearImagesData());
+    dispatch(updateOldInputValue(inputText));
+    dispatch(addSearchText(inputText));
+    navigate(`./?search=${inputText}`);
+    dispatch(resetPageIndex());
   }
+
   const FORM_STYLE = {
     paddingRight: showModal ? "4.7rem" : "3rem",
   };
@@ -53,7 +74,7 @@ function NavBar() {
   };
   return (
     <div style={NAV_BAR_STYLE} className={styles.navBar}>
-      <Link to="/" className={styles.linkBox}>
+      <Link onClick={() => setInputText("")} to="/" className={styles.linkBox}>
         <h1 className={styles.link}>Home</h1>
       </Link>
       <Link to="/history" className={styles.linkBox}>
@@ -63,8 +84,8 @@ function NavBar() {
         <div className={styles.inputBox}>
           <form
             style={FORM_STYLE}
-            className={styles.form}
             onSubmit={handleSubmit}
+            className={styles.form}
           >
             <input
               onChange={handleChange}

@@ -61,28 +61,48 @@ function AppLayout() {
         <NavBar />
         <div style={{ height: "7rem", width: "100%" }}></div>
         {pathname === "/" && search === "" && (
-          <h1
-            style={{
-              textAlign: "center",
-              marginTop: "2rem",
-              fontSize: "2.8rem",
-              borderBottom: "2px solid black",
-            }}
-          >
-            The most populars
-          </h1>
+          <>
+            <h1
+              style={{
+                textAlign: "center",
+                marginTop: "2rem",
+                fontSize: "2.8rem",
+                // borderBottom: "2px solid black",
+              }}
+            >
+              Top 20 most popular photos
+            </h1>
+            <div
+              style={{
+                height: "2px",
+                backgroundColor: "black",
+                width: "100%",
+                marginTop: "1rem",
+              }}
+            ></div>
+          </>
         )}
         {search !== "" && pathname === "/" && (
-          <h1
-            style={{
-              textAlign: "center",
-              marginTop: "2rem",
-              fontSize: "2.8rem",
-              borderBottom: "2px solid black",
-            }}
-          >
-            {search}
-          </h1>
+          <>
+            <h1
+              style={{
+                textAlign: "center",
+                marginTop: "2rem",
+                fontSize: "2.8rem",
+                // borderBottom: "2px solid black",
+              }}
+            >
+              {search}
+            </h1>
+            <div
+              style={{
+                height: "2px",
+                backgroundColor: "black",
+                width: "100%",
+                marginTop: "1rem",
+              }}
+            ></div>
+          </>
         )}
         <Outlet />
       </div>

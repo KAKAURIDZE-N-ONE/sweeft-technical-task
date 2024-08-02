@@ -133,7 +133,7 @@ function Gallery() {
   );
 
   const GALLERY_STYLE = {
-    paddingRight: showModal ? "4.7rem" : "3rem",
+    // paddingRight: showModal ? "4.7rem" : "3rem",
   };
 
   return (
