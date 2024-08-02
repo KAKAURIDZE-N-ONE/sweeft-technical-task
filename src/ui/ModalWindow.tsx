@@ -3,7 +3,7 @@ import styles from "./ModalWindow.module.css";
 import { clearImageDetails, updateShowModal } from "../features/gallerySlice";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { RootState } from "../store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 interface ImageDetails {
@@ -28,6 +28,16 @@ function ModalWindow() {
   const search: string = searchParams.get("search") || "";
   const pathname = location.pathname;
 
+  const imageUrl = imageDetails.image;
+
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setImageIsLoaded(true);
+      console.log("Background image has loaded.");
+    };
+    img.src = imageUrl;
+  }, [imageUrl]);
   // ამ ფუნქციებით უკვე გახსნნილ ფანჯარას ვხურავ და ვაბრუნებ შესაბამის url_ის მისამართზე
   /////////////////////////////////////////////////////////////////////////
   function handleModalBackgroundClick() {
@@ -72,7 +82,7 @@ function ModalWindow() {
           <img
             style={{
               width: "1000px",
-              height: "300px", // Adjust the height as needed
+              height: "90vh", // Adjust the height as needed
               backgroundImage: `url(${imageDetails?.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
@@ -145,6 +155,7 @@ function ModalWindow() {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               marginTop: "10svh",
+              overflow: "hidden",
             }}
             onClick={handleImageClick}
             onLoad={handleImageLoad}

@@ -5,10 +5,10 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 55rem;
+  width: 70rem;
   height: 95%;
   z-index: 100;
-  border-radius: 1.5rem;
+  /* border-radius: 2.5rem; */
 }
 
 .modalWindowBackground {
@@ -23,8 +23,8 @@
 }
 
 .fullImage {
-  max-width: 38rem;
-  border-radius: 1.5rem;
+  max-width: 50rem;
+  /* border-radius: 1.5rem; */
 }
 
 .modalWindowLayout {
@@ -33,7 +33,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   gap: 1rem;
   align-items: center;
-  border-radius: 1.5rem;
+  /* border-radius: 1.5rem; */
 }
 
 .descriptionBox {
@@ -43,7 +43,7 @@
   background-color: aliceblue;
   right: -5rem;
   padding: 1rem 3rem;
-  border-radius: 2rem;
+  /* border-radius: 2rem; */
   border: 3px solid black;
   z-index: 101;
 }
@@ -82,15 +82,18 @@
 }
 
 .mobileModalWindow {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
-@media (max-width: 50em) {
+@media (max-width: 55em) {
   .modalWindow {
     display: none;
   }
   .mobileModalWindow {
     display: unset;
+    opacity: 1;
+    pointer-events: all;
   }
   .descriptionBox {
     position: static;

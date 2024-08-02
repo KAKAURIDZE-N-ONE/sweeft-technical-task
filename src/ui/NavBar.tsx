@@ -31,7 +31,7 @@ function NavBar() {
     setPauseSearching(true);
     timeoutRef.current = setTimeout(() => {
       setPauseSearching(false);
-    }, 500); // Test with different values
+    }, 700); // Test with different values
   }
 
   console.log(pauseSearching);
@@ -55,15 +55,8 @@ function NavBar() {
     }
   }, [inputText, dispatch, navigate, oldInputValue, pauseSearching]);
 
-  function handleSubmit() {
-    if (!inputText || inputText.length < 3 || pauseSearching) return;
-    setPauseSearching(true);
-
-    dispatch(clearImagesData());
-    dispatch(updateOldInputValue(inputText));
-    dispatch(addSearchText(inputText));
-    navigate(`./?search=${inputText}`);
-    dispatch(resetPageIndex());
+  function handleSubmit(e: SubmitEvent) {
+    e.preventDefault();
   }
 
   const FORM_STYLE = {
