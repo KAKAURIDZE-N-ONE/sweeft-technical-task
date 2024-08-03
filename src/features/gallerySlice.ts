@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-interface Result {
+export interface Result {
   alt_description: string;
   alternative_slugs: AlternativeSlugs;
   asset_type: string;
@@ -60,20 +60,10 @@ interface User {
   [key: string]: any;
 }
 
-interface ApiResponse {
+export interface ApiResponse {
   total: number;
   results: Result[];
   total_pages: number;
-}
-
-interface Image {
-  id: string;
-  urls: {
-    small: string;
-    full: string;
-  };
-  likes: number;
-  alt_description: string;
 }
 
 interface ImageDetails {
@@ -87,7 +77,7 @@ interface ImageDetails {
 interface GalleryState {
   searchHistory: string[];
   pageIndex: number;
-  imagesData: Image[];
+  imagesData: Result[];
   showModal: boolean;
   imageDetails: ImageDetails | object;
   oldInputValue: string;

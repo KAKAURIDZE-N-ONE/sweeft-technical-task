@@ -13,74 +13,9 @@ import Image from "./Image";
 import { useQuery } from "@tanstack/react-query";
 import { getSearchedData } from "../services/apiSearch";
 import { getMostPopular } from "../services/apiMostPopular";
+import { ApiResponse } from "../features/gallerySlice";
 
 // Define Result with required properties
-interface Result {
-  alt_description: string;
-  alternative_slugs: AlternativeSlugs;
-  asset_type: string;
-  blur_hash: string;
-  color: string;
-  created_at: string;
-  description: string;
-  height: number;
-  id: string;
-  liked_by_user: boolean;
-  likes: number;
-  links: Links;
-  promoted_at: string | null;
-  slug: string;
-  sponsorship: string | null;
-  tags: Tag[];
-  updated_at: string;
-  urls: Urls;
-  user: User;
-  width: number;
-}
-
-interface AlternativeSlugs {
-  en: string;
-  es: string;
-  ja: string;
-  fr: string;
-  it: string;
-  [key: string]: string;
-}
-
-interface Links {
-  self: string;
-  html: string;
-  download: string;
-  download_location: string;
-}
-
-interface Tag {
-  title: string;
-}
-
-interface Urls {
-  raw: string;
-  full: string;
-  regular: string;
-  small: string;
-  thumb: string;
-  [key: string]: string;
-}
-
-interface User {
-  id: string;
-  updated_at: string;
-  username: string;
-  name: string;
-  first_name: string;
-}
-
-// Define ApiResponse with required properties
-interface ApiResponse {
-  total: number;
-  total_pages: number;
-  results: Result[];
-}
 
 function Gallery() {
   const imagesData = useSelector(
@@ -110,7 +45,6 @@ function Gallery() {
     queryFn: async () => {
       if (search !== "") {
         const result = await getSearchedData(pageIndex, search);
-        console.log(result);
         const response: ApiResponse = {
           total: result.total ?? 0,
           results: result.results ?? [],
