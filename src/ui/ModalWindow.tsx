@@ -34,7 +34,6 @@ function ModalWindow() {
     const img = new Image();
     img.onload = () => {
       setImageIsLoaded(true);
-      console.log("Background image has loaded.");
     };
     img.src = imageUrl;
   }, [imageUrl]);

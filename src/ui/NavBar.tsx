@@ -34,8 +34,6 @@ function NavBar() {
     }, 700); // Test with different values
   }
 
-  console.log(pauseSearching);
-
   // იმ შემთხვევაში თუ მომხმარებელი იგივე ტექსტს მოძებნის თავიდან არ ვარენდერებ
   // მაგრამ სერჩების ისტორიაში ვამატებ იგივე სიტყვას
   // ხოლო თუ განსხვავებულ ტექსტს ჩაწერს მაშინ ვასუფთავებ ძველ დატას და url_ში
@@ -55,7 +53,7 @@ function NavBar() {
     }
   }, [inputText, dispatch, navigate, oldInputValue, pauseSearching]);
 
-  function handleSubmit(e: SubmitEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
   }
 
