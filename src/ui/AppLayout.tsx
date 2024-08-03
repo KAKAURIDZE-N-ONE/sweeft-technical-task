@@ -15,9 +15,11 @@ function AppLayout() {
   const pathname = location.pathname;
 
   // როდესაც მოდალ ფანჯარა გააქტიურებულია user_ს სქროლვის საშუალებას არ ვაძლევ
-  showModal
-    ? (document.body.style.overflow = "hidden")
-    : (document.body.style.overflow = "auto");
+  useEffect(() => {
+    console.log(showModal);
+    if (showModal) document.body.style.overflow = "hidden";
+    else document.body.style.overflow = "auto";
+  }, [showModal]);
 
   // როდესაც appLayout ჩაიტვირთება მათგან ვიღებ ფოტოს id_ის რათა მოდალური ფანჯარა გაიხსნას
   // იმ შემთხვევაში თუ იძებნება image_id.
